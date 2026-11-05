@@ -44,7 +44,7 @@ void led_g()
     }
     init_g = true;
     g_state = OFF;
-    osDelay(300);
+    osDelay(200);
     for (;;)
     {
         if (g_state == OFF)
@@ -62,11 +62,11 @@ void led_g()
 }
 void led_b()
 {
-    while (init_g == 0)
+    while (init_g == false)
     {
         osDelay(1);
     }
-    osDelay(300);
+    osDelay(400);
     init_b = true;
     b_state = OFF;
     for (;;)
