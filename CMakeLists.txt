@@ -36,6 +36,9 @@ file(GLOB_RECURSE APP_SOURCES
         "Bsp/*.c"
         "User_Driver/*.c"
         "Task/*.c"
+        "Bsp/*.cpp"
+        "User_Driver/*.cpp"
+        "Task/*.cpp"
 )
 
 
