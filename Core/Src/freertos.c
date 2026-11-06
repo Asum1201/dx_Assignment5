@@ -108,6 +108,13 @@ const osThreadAttr_t MotorAssignment_attributes = {
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityAboveNormal,
 };
+/* Definitions for PMTask */
+osThreadId_t PMTaskHandle;
+const osThreadAttr_t PMTask_attributes = {
+  .name = "PMTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for can1_send_fifo */
 osMessageQueueId_t can1_send_fifoHandle;
 const osMessageQueueAttr_t can1_send_fifo_attributes = {
@@ -142,6 +149,7 @@ void led_g(void *argument);
 void led_b(void *argument);
 void StartINSTask(void *argument);
 void StartM3508Task(void *argument);
+void StartPMTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -209,6 +217,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of MotorAssignment */
   MotorAssignmentHandle = osThreadNew(StartM3508Task, NULL, &MotorAssignment_attributes);
+
+  /* creation of PMTask */
+  PMTaskHandle = osThreadNew(StartPMTask, NULL, &PMTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -362,6 +373,24 @@ __weak void StartM3508Task(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartM3508Task */
+}
+
+/* USER CODE BEGIN Header_StartPMTask */
+/**
+* @brief Function implementing the PMTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartPMTask */
+__weak void StartPMTask(void *argument)
+{
+  /* USER CODE BEGIN StartPMTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartPMTask */
 }
 
 /* Private application code --------------------------------------------------*/

@@ -26,7 +26,7 @@ void M3508Control()
 void StartM3508Task()
 {
     uint32_t tick = osKernelGetTickCount();
-    M3508 = new DJI_motor(&hcan1,nullptr,3,DJI_M3508,0);
+    M3508 = new DJI_motor(&hcan1,nullptr,1,DJI_M3508,0);
     for (;;)
     {
         M3508Control();

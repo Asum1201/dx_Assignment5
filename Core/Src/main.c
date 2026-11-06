@@ -23,11 +23,12 @@
 #include "dma.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "remote_ctrl.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,7 +49,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -102,8 +102,10 @@ int main(void)
   MX_CAN2_Init();
   MX_SPI1_Init();
   MX_TIM10_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
     bsp_can_init();
+  remote_ctrl_init();
   /* USER CODE END 2 */
 
   /* Init scheduler */
