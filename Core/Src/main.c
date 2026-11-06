@@ -18,9 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
-#include "BMI088driver.h"
-#include "bsp_dwt.h"
 #include "cmsis_os.h"
 #include "can.h"
 #include "dma.h"
@@ -110,9 +107,6 @@ int main(void)
   /* USER CODE END 2 */
 
   /* Init scheduler */
-  DWT_Init(168);
-  while (BMI088_init(&hspi1, 1) != BMI088_NO_ERROR)
-    ;
   osKernelInitialize();  /* Call init function for freertos objects (in cmsis_os2.c) */
   MX_FREERTOS_Init();
 

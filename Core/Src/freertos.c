@@ -78,28 +78,35 @@ osThreadId_t LED_RHandle;
 const osThreadAttr_t LED_R_attributes = {
   .name = "LED_R",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for LED_G */
 osThreadId_t LED_GHandle;
 const osThreadAttr_t LED_G_attributes = {
   .name = "LED_G",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for LED_B */
 osThreadId_t LED_BHandle;
 const osThreadAttr_t LED_B_attributes = {
   .name = "LED_B",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for INS_Task */
 osThreadId_t INS_TaskHandle;
 const osThreadAttr_t INS_Task_attributes = {
   .name = "INS_Task",
   .stack_size = 1024 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityAboveNormal,
+};
+/* Definitions for MotorAssignment */
+osThreadId_t MotorAssignmentHandle;
+const osThreadAttr_t MotorAssignment_attributes = {
+  .name = "MotorAssignment",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityAboveNormal,
 };
 /* Definitions for can1_send_fifo */
 osMessageQueueId_t can1_send_fifoHandle;
@@ -134,6 +141,7 @@ void led_r(void *argument);
 void led_g(void *argument);
 void led_b(void *argument);
 void StartINSTask(void *argument);
+void StartM3508Task(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -198,6 +206,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of INS_Task */
   INS_TaskHandle = osThreadNew(StartINSTask, NULL, &INS_Task_attributes);
+
+  /* creation of MotorAssignment */
+  MotorAssignmentHandle = osThreadNew(StartM3508Task, NULL, &MotorAssignment_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -333,6 +344,24 @@ __weak void StartINSTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartINSTask */
+}
+
+/* USER CODE BEGIN Header_StartM3508Task */
+/**
+* @brief Function implementing the MotorAssignment thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartM3508Task */
+__weak void StartM3508Task(void *argument)
+{
+  /* USER CODE BEGIN StartM3508Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartM3508Task */
 }
 
 /* Private application code --------------------------------------------------*/
