@@ -94,6 +94,13 @@ const osThreadAttr_t LED_B_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityHigh,
 };
+/* Definitions for INS_Task */
+osThreadId_t INS_TaskHandle;
+const osThreadAttr_t INS_Task_attributes = {
+  .name = "INS_Task",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityHigh,
+};
 /* Definitions for can1_send_fifo */
 osMessageQueueId_t can1_send_fifoHandle;
 const osMessageQueueAttr_t can1_send_fifo_attributes = {
@@ -126,6 +133,7 @@ void DJI_motor_service(void *argument);
 void led_r(void *argument);
 void led_g(void *argument);
 void led_b(void *argument);
+void StartINSTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -187,6 +195,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of LED_B */
   LED_BHandle = osThreadNew(led_b, NULL, &LED_B_attributes);
+
+  /* creation of INS_Task */
+  INS_TaskHandle = osThreadNew(StartINSTask, NULL, &INS_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -304,6 +315,24 @@ __weak void led_b(void *argument)
     osDelay(1);
   }
   /* USER CODE END led_b */
+}
+
+/* USER CODE BEGIN Header_StartINSTask */
+/**
+* @brief Function implementing the INS_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartINSTask */
+__weak void StartINSTask(void *argument)
+{
+  /* USER CODE BEGIN StartINSTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartINSTask */
 }
 
 /* Private application code --------------------------------------------------*/

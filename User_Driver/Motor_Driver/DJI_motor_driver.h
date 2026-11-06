@@ -16,7 +16,7 @@
 #include "stm32f4xx_hal.h"
 #include "cmsis_os.h"
 #include "motor_driver.h"
-#include "CAN_bsp.h"
+#include "../../Bsp/CAN_bsp/CAN_bsp.h"
 #include "pid_driver.h"
 #include "string.h"
 #include "main.h"

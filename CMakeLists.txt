@@ -31,8 +31,44 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 # Enable CMake support for ASM and C languages
 enable_language(C ASM)
 
+# 收集所有 .c 文件（递归）
+file(GLOB_RECURSE APP_SOURCES
+        "Bsp/*.c"
+        "User_Driver/*.c"
+        "Task/*.c"
+)
+
+
 # Create an executable object type
-add_executable(${CMAKE_PROJECT_NAME})
+add_executable(${CMAKE_PROJECT_NAME}
+               ${APP_SOURCES}
+)
+
+
+
+ #从basic_framework copy 过来的，我将好好研究一下
+# add inc
+# 递归包含头文件的函数
+function(include_sub_directories_recursively root_dir)
+    if (IS_DIRECTORY ${root_dir})               # 当前路径是一个目录吗，是的话就加入到包含目录
+        message("include dir: " ${root_dir})
+        include_directories(${root_dir})
+    endif()
+
+    file(GLOB ALL_SUB RELATIVE ${root_dir} ${root_dir}/*) # 获得当前目录下的所有文件，让如ALL_SUB列表中
+    foreach(sub ${ALL_SUB})
+        if (IS_DIRECTORY ${root_dir}/${sub})
+            include_sub_directories_recursively(${root_dir}/${sub}) # 对子目录递归调用，包含
+        endif()
+    endforeach()
+endfunction()
+#include_sub_directories_recursively(${CMAKE_SOURCE_DIR}/Drivers)
+include_sub_directories_recursively(${CMAKE_SOURCE_DIR}/Middlewares)
+include_sub_directories_recursively(${CMAKE_SOURCE_DIR}/Bsp)
+include_sub_directories_recursively(${CMAKE_SOURCE_DIR}/User_Driver)
+include_sub_directories_recursively(${CMAKE_SOURCE_DIR}/Task)
+include_sub_directories_recursively(${CMAKE_SOURCE_DIR}/Inc)
+
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
@@ -43,14 +79,8 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 # Add sources to executable
-file(GLOB_RECURSE USER_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/Bsp/*.*
-        ${CMAKE_CURRENT_SOURCE_DIR}/User_Driver/*.*
-        ${CMAKE_CURRENT_SOURCE_DIR}/Task/*.*
-)
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
-        ${USER_SOURCES}
 )
 
 # Add include paths
@@ -58,13 +88,13 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
         Bsp
         User_Driver
-        User_Driver/Motor_Driver
         Task
 )
 
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined symbols
+        ARM_MATH_CM4
 )
 
 # Remove wrong libob.a library dependency when using cpp files
@@ -73,6 +103,4 @@ list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
 # Add linked libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}
     stm32cubemx
-
-    # Add user defined libraries
 )
