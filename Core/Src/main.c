@@ -28,6 +28,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "BMI088driver.h"
+#include "bsp_dwt.h"
 #include "remote_ctrl.h"
 /* USER CODE END Includes */
 
@@ -104,6 +106,10 @@ int main(void)
   MX_TIM10_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  /* USER CODE BEGIN 2 */
+  DWT_Init(168);
+  while (BMI088_init(&hspi1, 1) != BMI088_NO_ERROR)
+    ;
     bsp_can_init();
   remote_ctrl_init();
   /* USER CODE END 2 */
